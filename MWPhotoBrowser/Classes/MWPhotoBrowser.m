@@ -662,8 +662,8 @@
     return _photoCount;
 }
 
-- (id<MWPhoto>)photoAtIndex:(NSUInteger)index {
-    id <MWPhoto> photo = nil;
+- (id<MWRePhoto>)photoAtIndex:(NSUInteger)index {
+    id <MWRePhoto> photo = nil;
     if (index < _photos.count) {
         if ([_photos objectAtIndex:index] == [NSNull null]) {
             if ([_delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:)]) {
@@ -679,8 +679,8 @@
     return photo;
 }
 
-- (id<MWPhoto>)thumbPhotoAtIndex:(NSUInteger)index {
-    id <MWPhoto> photo = nil;
+- (id<MWRePhoto>)thumbPhotoAtIndex:(NSUInteger)index {
+    id <MWRePhoto> photo = nil;
     if (index < _thumbPhotos.count) {
         if ([_thumbPhotos objectAtIndex:index] == [NSNull null]) {
             if ([_delegate respondsToSelector:@selector(photoBrowser:thumbPhotoAtIndex:)]) {
@@ -699,7 +699,7 @@
     if ([_delegate respondsToSelector:@selector(photoBrowser:captionViewForPhotoAtIndex:)]) {
         captionView = [_delegate photoBrowser:self captionViewForPhotoAtIndex:index];
     } else {
-        id <MWPhoto> photo = [self photoAtIndex:index];
+        id <MWRePhoto> photo = [self photoAtIndex:index];
         if ([photo respondsToSelector:@selector(caption)]) {
             if ([photo caption]) captionView = [[MWCaptionView alloc] initWithPhoto:photo];
         }
@@ -726,11 +726,11 @@
     }
 }
 
-- (UIImage *)imageForPhoto:(id<MWPhoto>)photo {
+- (UIImage *)imageForPhoto:(id<MWRePhoto>)photo {
 	if (photo) {
 		// Get image or obtain in background
-		if ([photo underlyingImage]) {
-			return [photo underlyingImage];
+		if ([photo underlyingBeforeImage]) {
+			return [photo underlyingBeforeImage];
 		} else {
             [photo loadUnderlyingImageAndNotify];
 		}
@@ -738,7 +738,7 @@
 	return nil;
 }
 
-- (void)loadAdjacentPhotosIfNecessary:(id<MWPhoto>)photo {
+- (void)loadAdjacentPhotosIfNecessary:(id<MWRePhoto>)photo {
     MWZoomingScrollView *page = [self pageDisplayingPhoto:photo];
     if (page) {
         // If page is current page then initiate loading of previous and next pages
@@ -746,16 +746,16 @@
         if (_currentPageIndex == pageIndex) {
             if (pageIndex > 0) {
                 // Preload index - 1
-                id <MWPhoto> photo = [self photoAtIndex:pageIndex-1];
-                if (![photo underlyingImage]) {
+                id <MWRePhoto> photo = [self photoAtIndex:pageIndex-1];
+                if (![photo underlyingBeforeImage]) {
                     [photo loadUnderlyingImageAndNotify];
                     MWLog(@"Pre-loading image at index %lu", (unsigned long)pageIndex-1);
                 }
             }
             if (pageIndex < [self numberOfPhotos] - 1) {
                 // Preload index + 1
-                id <MWPhoto> photo = [self photoAtIndex:pageIndex+1];
-                if (![photo underlyingImage]) {
+                id <MWRePhoto> photo = [self photoAtIndex:pageIndex+1];
+                if (![photo underlyingBeforeImage]) {
                     [photo loadUnderlyingImageAndNotify];
                     MWLog(@"Pre-loading image at index %lu", (unsigned long)pageIndex+1);
                 }
@@ -767,10 +767,10 @@
 #pragma mark - MWPhoto Loading Notification
 
 - (void)handleMWPhotoLoadingDidEndNotification:(NSNotification *)notification {
-    id <MWPhoto> photo = [notification object];
+    id <MWRePhoto> photo = [notification object];
     MWZoomingScrollView *page = [self pageDisplayingPhoto:photo];
     if (page) {
-        if ([photo underlyingImage]) {
+        if ([photo underlyingBeforeImage]) {
             // Successful load
             [page displayImage];
             [self loadAdjacentPhotosIfNecessary:photo];
@@ -883,7 +883,7 @@
 	return thePage;
 }
 
-- (MWZoomingScrollView *)pageDisplayingPhoto:(id<MWPhoto>)photo {
+- (MWZoomingScrollView *)pageDisplayingPhoto:(id<MWRePhoto>)photo {
 	MWZoomingScrollView *thePage = nil;
 	for (MWZoomingScrollView *page in _visiblePages) {
 		if (page.photo == photo) {
@@ -945,8 +945,8 @@
     
     // Load adjacent images if needed and the photo is already
     // loaded. Also called after photo has been loaded in background
-    id <MWPhoto> currentPhoto = [self photoAtIndex:index];
-    if ([currentPhoto underlyingImage]) {
+    id <MWRePhoto> currentPhoto = [self photoAtIndex:index];
+    if ([currentPhoto underlyingBeforeImage]) {
         // photo loaded so load ajacent now
         [self loadAdjacentPhotosIfNecessary:currentPhoto];
     }
@@ -1095,7 +1095,7 @@
 	// Buttons
 	_previousButton.enabled = (_currentPageIndex > 0);
 	_nextButton.enabled = (_currentPageIndex < numberOfPhotos - 1);
-    _actionButton.enabled = [[self photoAtIndex:_currentPageIndex] underlyingImage] != nil;
+    _actionButton.enabled = [[self photoAtIndex:_currentPageIndex] underlyingBeforeImage] != nil && [[self photoAtIndex:_currentPageIndex] underlyingAfterImage] != nil;
 	
 }
 
@@ -1468,8 +1468,8 @@
     } else {
         
         // Only react when image has loaded
-        id <MWPhoto> photo = [self photoAtIndex:_currentPageIndex];
-        if ([self numberOfPhotos] > 0 && [photo underlyingImage]) {
+        id <MWRePhoto> photo = [self photoAtIndex:_currentPageIndex];
+        if ([self numberOfPhotos] > 0 && [photo underlyingBeforeImage]) {
             
             // If they have defined a delegate method then just message them
             if ([self.delegate respondsToSelector:@selector(photoBrowser:actionButtonPressedForPhotoAtIndex:)]) {
@@ -1503,7 +1503,7 @@
                 } else {
                     
                     // Show activity view controller
-                    NSMutableArray *items = [NSMutableArray arrayWithObject:[photo underlyingImage]];
+                    NSMutableArray *items = [NSMutableArray arrayWithObject:[photo underlyingBeforeImage]];
                     if (photo.caption) {
                         [items addObject:photo.caption];
                     }
@@ -1604,16 +1604,16 @@
 #pragma mark - Actions
 
 - (void)savePhoto {
-    id <MWPhoto> photo = [self photoAtIndex:_currentPageIndex];
-    if ([photo underlyingImage]) {
+    id <MWRePhoto> photo = [self photoAtIndex:_currentPageIndex];
+    if ([photo underlyingBeforeImage]) {
         [self showProgressHUDWithMessage:[NSString stringWithFormat:@"%@\u2026" , NSLocalizedString(@"Saving", @"Displayed with ellipsis as 'Saving...' when an item is in the process of being saved")]];
         [self performSelector:@selector(actuallySavePhoto:) withObject:photo afterDelay:0];
     }
 }
 
-- (void)actuallySavePhoto:(id<MWPhoto>)photo {
-    if ([photo underlyingImage]) {
-        UIImageWriteToSavedPhotosAlbum([photo underlyingImage], self, 
+- (void)actuallySavePhoto:(id<MWRePhoto>)photo {
+    if ([photo underlyingBeforeImage]) {
+        UIImageWriteToSavedPhotosAlbum([photo underlyingBeforeImage], self, 
                                        @selector(image:didFinishSavingWithError:contextInfo:), nil);
     }
 }
@@ -1624,16 +1624,16 @@
 }
 
 - (void)copyPhoto {
-    id <MWPhoto> photo = [self photoAtIndex:_currentPageIndex];
-    if ([photo underlyingImage]) {
+    id <MWRePhoto> photo = [self photoAtIndex:_currentPageIndex];
+    if ([photo underlyingBeforeImage]) {
         [self showProgressHUDWithMessage:[NSString stringWithFormat:@"%@\u2026" , NSLocalizedString(@"Copying", @"Displayed with ellipsis as 'Copying...' when an item is in the process of being copied")]];
         [self performSelector:@selector(actuallyCopyPhoto:) withObject:photo afterDelay:0];
     }
 }
 
-- (void)actuallyCopyPhoto:(id<MWPhoto>)photo {
-    if ([photo underlyingImage]) {
-        [[UIPasteboard generalPasteboard] setData:UIImagePNGRepresentation([photo underlyingImage])
+- (void)actuallyCopyPhoto:(id<MWRePhoto>)photo {
+    if ([photo underlyingBeforeImage]) {
+        [[UIPasteboard generalPasteboard] setData:UIImagePNGRepresentation([photo underlyingBeforeImage])
                                 forPasteboardType:@"public.png"];
         [self showProgressHUDCompleteMessage:NSLocalizedString(@"Copied", @"Informing the user an item has finished copying")];
         [self hideControlsAfterDelay]; // Continue as normal...
@@ -1641,19 +1641,19 @@
 }
 
 - (void)emailPhoto {
-    id <MWPhoto> photo = [self photoAtIndex:_currentPageIndex];
-    if ([photo underlyingImage]) {
+    id <MWRePhoto> photo = [self photoAtIndex:_currentPageIndex];
+    if ([photo underlyingBeforeImage]) {
         [self showProgressHUDWithMessage:[NSString stringWithFormat:@"%@\u2026" , NSLocalizedString(@"Preparing", @"Displayed with ellipsis as 'Preparing...' when an item is in the process of being prepared")]];
         [self performSelector:@selector(actuallyEmailPhoto:) withObject:photo afterDelay:0];
     }
 }
 
-- (void)actuallyEmailPhoto:(id<MWPhoto>)photo {
-    if ([photo underlyingImage]) {
+- (void)actuallyEmailPhoto:(id<MWRePhoto>)photo {
+    if ([photo underlyingBeforeImage]) {
         MFMailComposeViewController *emailer = [[MFMailComposeViewController alloc] init];
         emailer.mailComposeDelegate = self;
         [emailer setSubject:NSLocalizedString(@"Photo", nil)];
-        [emailer addAttachmentData:UIImagePNGRepresentation([photo underlyingImage]) mimeType:@"png" fileName:@"Photo.png"];
+        [emailer addAttachmentData:UIImagePNGRepresentation([photo underlyingBeforeImage]) mimeType:@"png" fileName:@"Photo.png"];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             emailer.modalPresentationStyle = UIModalPresentationPageSheet;
         }

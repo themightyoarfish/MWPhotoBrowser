@@ -8,20 +8,20 @@
 
 #import "MWCommon.h"
 #import "MWCaptionView.h"
-#import "MWPhoto.h"
+#import "MWRePhoto.h"
 
 static const CGFloat labelPadding = 10;
 
 // Private
 @interface MWCaptionView () {
-    id <MWPhoto> _photo;
+    id <MWRePhoto> _photo;
     UILabel *_label;    
 }
 @end
 
 @implementation MWCaptionView
 
-- (id)initWithPhoto:(id<MWPhoto>)photo {
+- (id)initWithPhoto:(id<MWRePhoto>)photo {
     self = [super initWithFrame:CGRectMake(0, 0, 320, 44)]; // Random initial frame
     if (self) {
         self.userInteractionEnabled = NO;

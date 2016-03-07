@@ -7,18 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MWPhotoProtocol.h"
+#import "MWRePhotoProtocol.h"
 #import "MWTapDetectingImageView.h"
 #import "MWTapDetectingView.h"
 
-@class MWPhotoBrowser, MWPhoto, MWCaptionView;
+@class MWPhotoBrowser, MWRePhoto, MWCaptionView;
 
 @interface MWZoomingScrollView : UIScrollView <UIScrollViewDelegate, MWTapDetectingImageViewDelegate, MWTapDetectingViewDelegate> {
 
 }
 
 @property () NSUInteger index;
-@property (nonatomic) id <MWPhoto> photo;
+@property (nonatomic) id <MWRePhoto> photo;
 @property (nonatomic, weak) MWCaptionView *captionView;
 @property (nonatomic, weak) UIButton *selectedButton;
 

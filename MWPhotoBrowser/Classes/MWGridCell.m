@@ -107,10 +107,10 @@
 
 #pragma mark - Image Handling
 
-- (void)setPhoto:(id <MWPhoto>)photo {
+- (void)setPhoto:(id <MWRePhoto>)photo {
     _photo = photo;
     if (_photo) {
-        if (![_photo underlyingImage]) {
+        if (!([_photo underlyingBeforeImage] && [_photo underlyingAfterImage])) {
             [self showLoadingIndicator];
         } else {
             [self hideLoadingIndicator];
@@ -121,7 +121,7 @@
 }
 
 - (void)displayImage {
-    _imageView.image = [_photo underlyingImage];
+    _imageView.image = [_photo underlyingBeforeImage];
     _selectedButton.hidden = !_selectionMode;
     [self hideImageFailure];
 }
@@ -198,7 +198,7 @@
 
 - (void)setProgressFromNotification:(NSNotification *)notification {
     NSDictionary *dict = [notification object];
-    id <MWPhoto> photoWithProgress = [dict objectForKey:@"photo"];
+    id <MWRePhoto> photoWithProgress = [dict objectForKey:@"photo"];
     if (photoWithProgress == _photo) {
         //        NSLog(@"%f", [[dict valueForKey:@"progress"] floatValue]);
         float progress = [[dict valueForKey:@"progress"] floatValue];
@@ -207,9 +207,9 @@
 }
 
 - (void)handleMWPhotoLoadingDidEndNotification:(NSNotification *)notification {
-    id <MWPhoto> photo = [notification object];
+    id <MWRePhoto> photo = [notification object];
     if (photo == _photo) {
-        if ([photo underlyingImage]) {
+        if ([photo underlyingBeforeImage]) {
             // Successful load
             [self displayImage];
         } else {

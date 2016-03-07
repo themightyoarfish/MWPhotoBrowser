@@ -9,7 +9,7 @@
 #import "MWCommon.h"
 #import "MWZoomingScrollView.h"
 #import "MWPhotoBrowser.h"
-#import "MWPhoto.h"
+#import "MWRePhoto.h"
 #import "DACircularProgressView.h"
 #import "MWPhotoBrowserPrivate.h"
 
@@ -96,7 +96,7 @@
 
 #pragma mark - Image
 
-- (void)setPhoto:(id<MWPhoto>)photo {
+- (void)setPhoto:(id<MWRePhoto>)photo {
     // Cancel any loading on old photo
     if (_photo && photo == nil) {
         if ([_photo respondsToSelector:@selector(cancelAnyLoading)]) {
@@ -184,7 +184,7 @@
 
 - (void)setProgressFromNotification:(NSNotification *)notification {
     NSDictionary *dict = [notification object];
-    id <MWPhoto> photoWithProgress = [dict objectForKey:@"photo"];
+    id <MWRePhoto> photoWithProgress = [dict objectForKey:@"photo"];
     if (photoWithProgress == self.photo) {
         float progress = [[dict valueForKey:@"progress"] floatValue];
         _loadingIndicator.progress = MAX(MIN(1, progress), 0);

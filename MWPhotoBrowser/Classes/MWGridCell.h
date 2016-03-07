@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MWPhoto.h"
+#import "MWRePhoto.h"
 #import "MWGridViewController.h"
 #import "PSTCollectionView.h"
 
@@ -15,7 +15,7 @@
 
 @property (nonatomic, weak) MWGridViewController *gridController;
 @property (nonatomic) NSUInteger index;
-@property (nonatomic) id <MWPhoto> photo;
+@property (nonatomic) id <MWRePhoto> photo;
 @property (nonatomic) BOOL selectionMode;
 @property (nonatomic) BOOL isSelected;
 

@@ -20,7 +20,7 @@
 //
 // You can see the MWPhoto class for an example implementation of this protocol
 //
-@protocol MWPhoto <NSObject>
+@protocol MWRePhoto <NSObject>
 
 @required
 
@@ -31,7 +31,8 @@
 // fetching of images from any external of source. That should be handled
 // in -loadUnderlyingImageAndNotify: which may be called by the photo browser if this
 // methods returns nil.
-@property (nonatomic, strong) UIImage *underlyingImage;
+@property (nonatomic, strong) UIImage *underlyingBeforeImage;
+@property (nonatomic, strong) UIImage *underlyingAfterImage;
 
 // Called when the browser has determined the underlying images is not
 // already loaded into memory but needs it.

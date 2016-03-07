@@ -121,7 +121,7 @@
 - (NSUInteger)numberOfPhotos;
 - (id<MWRePhoto>)photoAtIndex:(NSUInteger)index;
 - (id<MWRePhoto>)thumbPhotoAtIndex:(NSUInteger)index;
-- (UIImage *)imageForPhoto:(id<MWRePhoto>)photo;
+- (NSArray *)imagesForRePhoto:(id<MWRePhoto>)photo;
 - (BOOL)photoIsSelectedAtIndex:(NSUInteger)index;
 - (void)setPhotoSelected:(BOOL)selected atIndex:(NSUInteger)index;
 - (void)loadAdjacentPhotosIfNecessary:(id<MWRePhoto>)photo;

@@ -726,11 +726,11 @@
     }
 }
 
-- (UIImage *)imageForPhoto:(id<MWRePhoto>)photo {
+- (NSArray*)imagesForRePhoto:(id<MWRePhoto>)photo {
 	if (photo) {
 		// Get image or obtain in background
-		if ([photo underlyingBeforeImage]) {
-			return [photo underlyingBeforeImage];
+		if ([photo underlyingBeforeImage] && [photo underlyingAfterImage]) {
+			return @[[photo underlyingBeforeImage], [photo underlyingAfterImage]];
 		} else {
             [photo loadUnderlyingImageAndNotify];
 		}
@@ -886,7 +886,7 @@
 - (MWZoomingScrollView *)pageDisplayingPhoto:(id<MWRePhoto>)photo {
 	MWZoomingScrollView *thePage = nil;
 	for (MWZoomingScrollView *page in _visiblePages) {
-		if (page.photo == photo) {
+		if (page.rePhoto == photo) {
 			thePage = page; break;
 		}
 	}
@@ -898,7 +898,7 @@
 - (void)configurePage:(MWZoomingScrollView *)page forIndex:(NSUInteger)index {
 	page.frame = [self frameForPageAtIndex:index];
     page.index = index;
-    page.photo = [self photoAtIndex:index];
+    page.rePhoto = [self photoAtIndex:index];
 }
 
 - (MWZoomingScrollView *)dequeueRecycledPage {

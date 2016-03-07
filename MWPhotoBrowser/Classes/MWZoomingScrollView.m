@@ -23,7 +23,7 @@
     UIView* _imageContainer;
 	DACircularProgressView *_loadingIndicator;
     UIImageView *_loadingError;
-    
+    UISlider* _slider;
 }
 
 @end
@@ -72,6 +72,10 @@
 		_loadingIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin |
         UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
 		[self addSubview:_loadingIndicator];
+        
+        UISlider* slider = [[UISlider alloc] initWithFrame:CGRectZero];
+        [self addSubview:slider];
+        [self bringSubviewToFront:slider];
 
         // Listen progress notifications
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -155,6 +159,7 @@
 			_beforePhotoImageView.frame = photoImageViewFrame;
 			_afterPhotoImageView.frame = photoImageViewFrame;
 			self.contentSize = photoImageViewFrame.size;
+            _imageContainer.frame = photoImageViewFrame;
 
 			// Set zoom to minimum zoom
 			[self setMaxMinZoomScalesForCurrentBounds];
@@ -224,7 +229,6 @@
 - (CGFloat)initialZoomScaleWithMinScale {
     CGFloat zoomScale = self.minimumZoomScale;
     if (_beforePhotoImageView && _afterPhotoImageView && _photoBrowser.zoomPhotosToFill) {
-        // Zoom image to fill if the aspect ratios are fairly similar
         CGSize boundsSize = self.bounds.size;
         UIImage* beforeImg = _beforePhotoImageView.image;
         UIImage* afterImg = _afterPhotoImageView.image;
@@ -235,6 +239,7 @@
         CGFloat imageAR = imageSize.width / imageSize.height;
         CGFloat xScale = boundsSize.width / imageSize.width;    // the scale needed to perfectly fit the image width-wise
         CGFloat yScale = boundsSize.height / imageSize.height;  // the scale needed to perfectly fit the image height-wise
+        self.minimumZoomScale = MIN(self.minimumZoomScale, MIN(xScale, yScale));
         // Zooms standard portrait images on a 3.5in screen but not on a 4in screen.
         if (ABS(boundsAR - imageAR) < 0.17) {
             zoomScale = MAX(xScale, yScale);
@@ -242,6 +247,7 @@
             zoomScale = MIN(MAX(self.minimumZoomScale, zoomScale), self.maximumZoomScale);
         }
     }
+    
     return zoomScale;
 }
 
@@ -262,7 +268,7 @@
 	// Sizes
     CGSize boundsSize = self.bounds.size;
     CGSize imageSize = _imageContainer.frame.size;
-    
+
     // Calculate Min
     CGFloat xScale = boundsSize.width / imageSize.width;    // the scale needed to perfectly fit the image width-wise
     CGFloat yScale = boundsSize.height / imageSize.height;  // the scale needed to perfectly fit the image height-wise
@@ -272,7 +278,7 @@
 	CGFloat maxScale = 3;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         // Let them go a bit bigger on a bigger screen!
-        maxScale = 4;
+        maxScale = 2;
     }
 
     // Image is smaller than screen so no zooming!
@@ -286,7 +292,7 @@
     
     // Initial zoom
     self.zoomScale = [self initialZoomScaleWithMinScale];
-    
+
     // If we're zooming to fill then centralise
     if (self.zoomScale != minScale) {
         // Centralise
@@ -295,17 +301,20 @@
         // Disable scrolling initially until the first pinch to fix issues with swiping on an initally zoomed in photo
         self.scrollEnabled = NO;
     }
-    self.zoomScale = 0.05;
     
     // Layout
 	[self setNeedsLayout];
-
+    
 }
 
 #pragma mark - Layout
 
 - (void)layoutSubviews {
 	
+//    float sliderWidth = self.bounds.size.width * 0.7;
+//    float sliderHeight = 100;
+//    _slider.frame = CGRectMake(self.bounds.size.width - 0.5 * sliderWidth, self.bounds.size.height * 0.1, sliderWidth, sliderHeight);
+//    
 	// Update tap view frame
 	_tapView.frame = self.bounds;
 	

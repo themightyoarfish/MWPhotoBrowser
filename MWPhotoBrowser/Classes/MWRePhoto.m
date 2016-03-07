@@ -89,6 +89,7 @@
 }
 
 // Set the underlyingImage
+// This probbly does not work correctly with rephotos
 - (void)performLoadUnderlyingImageAndNotify {
     
     // Get underlying image
@@ -172,7 +173,7 @@
                                                               if (expectedSize > 0) {
                                                                   float progress = receivedSize / (float)expectedSize;
                                                                   NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                        [NSNumber numberWithFloat:progress], @"before image progress",
+                                                                                        [NSNumber numberWithFloat:progress], @"progress",
                                                                                         self, @"photo", nil];
                                                                   [[NSNotificationCenter defaultCenter] postNotificationName:MWPHOTO_PROGRESS_NOTIFICATION object:dict];
                                                               }
@@ -191,7 +192,7 @@
                                                                                                            if (expectedSize > 0) {
                                                                                                                float progress = receivedSize / (float)expectedSize;
                                                                                                                NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                                                     [NSNumber numberWithFloat:progress], @"after image progress",
+                                                                                                                                     [NSNumber numberWithFloat:progress], @"progress",
                                                                                                                                      self, @"photo", nil];
                                                                                                                [[NSNotificationCenter defaultCenter] postNotificationName:MWPHOTO_PROGRESS_NOTIFICATION object:dict];
                                                                                                            }

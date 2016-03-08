@@ -16,6 +16,9 @@
 #define ACTION_SHEET_OLD_ACTIONS 2000
 
 @implementation MWPhotoBrowser
+{
+    UISlider* _slider;
+}
 
 #pragma mark - Init
 
@@ -159,6 +162,19 @@
 	_pagingScrollView.backgroundColor = [UIColor blackColor];
     _pagingScrollView.contentSize = [self contentSizeForPagingScrollView];
 	[self.view addSubview:_pagingScrollView];
+    
+    // Slider
+    _slider = [[UISlider alloc] initWithFrame:CGRectZero];
+    _slider.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    [self.view addSubview:_slider];
+    [self.view bringSubviewToFront:_slider];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_slider attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_slider attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:-80]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_slider attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:0.7 constant:0]];
+    [_slider addConstraint:[NSLayoutConstraint constraintWithItem:_slider attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:nil multiplier:1 constant:80]];
+    _slider.layer.cornerRadius = 5;
+    _slider.translatesAutoresizingMaskIntoConstraints = NO;
+    [_slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 	
     // Toolbar
     _toolbar = [[UIToolbar alloc] initWithFrame:[self frameForToolbarAtOrientation:self.interfaceOrientation]];
@@ -912,6 +928,9 @@
 // Handle page changes
 - (void)didStartViewingPageAtIndex:(NSUInteger)index {
     
+    // Set the visible percentage to the one in the current image for visual continuity
+    [[self pageDisplayedAtIndex:index] sliderValueChanged:_slider];
+
     if (![self numberOfPhotos]) {
         // Show controls
         [self setControlsHidden:NO animated:YES permanent:YES];
@@ -1106,6 +1125,7 @@
 		CGRect pageFrame = [self frameForPageAtIndex:index];
         [_pagingScrollView setContentOffset:CGPointMake(pageFrame.origin.x - PADDING, 0) animated:animated];
 		[self updateNavigation];
+
 	}
 	
 	// Update timer to give more time
@@ -1129,6 +1149,12 @@
 }
 
 #pragma mark - Interactions
+
+-(void)sliderValueChanged:(UISlider*)slider
+{
+    MWZoomingScrollView* currentPage = [self pageDisplayedAtIndex:_currentPageIndex];
+    [currentPage sliderValueChanged:slider];
+}
 
 - (void)selectedButtonTapped:(id)sender {
     UIButton *selectedButton = (UIButton *)sender;

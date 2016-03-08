@@ -27,5 +27,5 @@
 - (void)displayImageFailure;
 - (void)setMaxMinZoomScalesForCurrentBounds;
 - (void)prepareForReuse;
-
+- (void)sliderValueChanged:(UISlider*)slider;
 @end

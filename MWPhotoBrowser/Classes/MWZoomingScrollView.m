@@ -12,6 +12,7 @@
 #import "MWRePhoto.h"
 #import "DACircularProgressView.h"
 #import "MWPhotoBrowserPrivate.h"
+#import "MaskableUIImageView.h"
 
 // Private methods and properties
 @interface MWZoomingScrollView () {
@@ -59,6 +60,10 @@
         [_imageContainer addSubview:_afterPhotoImageView];
         [self addSubview:_imageContainer];
         
+        CAShapeLayer* maskLayer = [[CAShapeLayer alloc] init];
+        _afterPhotoImageView.maskLayer = maskLayer;
+
+        
 		// Loading indicator
 		_loadingIndicator = [[DACircularProgressView alloc] initWithFrame:CGRectMake(140.0f, 30.0f, 40.0f, 40.0f)];
         _loadingIndicator.userInteractionEnabled = NO;
@@ -73,16 +78,7 @@
         UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
 		[self addSubview:_loadingIndicator];
         
-//        _slider = [[UISlider alloc] initWithFrame:CGRectZero];
-//        _slider.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-//        [_photoBrowser.view addSubview:_slider];
-//        [_photoBrowser.view bringSubviewToFront:_slider];
-//        [_photoBrowser.view addConstraint:[NSLayoutConstraint constraintWithItem:_slider attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:_photoBrowser.view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
-//        [_photoBrowser.view addConstraint:[NSLayoutConstraint constraintWithItem:_slider attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:_photoBrowser.view attribute:NSLayoutAttributeBottom multiplier:1 constant:-80]];
-//        [_photoBrowser.view addConstraint:[NSLayoutConstraint constraintWithItem:_slider attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_photoBrowser.view attribute:NSLayoutAttributeWidth multiplier:0.7 constant:0]];
-//        [_slider addConstraint:[NSLayoutConstraint constraintWithItem:_slider attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:nil multiplier:1 constant:80]];
-//        _slider.layer.cornerRadius = 5;
-//        _slider.translatesAutoresizingMaskIntoConstraints = NO;
+
         // Listen progress notifications
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(setProgressFromNotification:)
@@ -116,6 +112,11 @@
 }
 
 #pragma mark - Image
+
+-(void)sliderValueChanged:(UISlider*)slider
+{
+    [_afterPhotoImageView maskImageViewToWidthPercentage:slider.value];
+}
 
 - (void)setRePhoto:(id<MWRePhoto>)photo {
     // Cancel any loading on old photo

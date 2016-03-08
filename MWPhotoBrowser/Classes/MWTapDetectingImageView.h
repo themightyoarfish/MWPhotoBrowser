@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "MaskableUIImageView.h"
 
 @protocol MWTapDetectingImageViewDelegate;
 
-@interface MWTapDetectingImageView : UIImageView {}
+@interface MWTapDetectingImageView : MaskableUIImageView {}
 
 @property (nonatomic, weak) id <MWTapDetectingImageViewDelegate> tapDelegate;
 

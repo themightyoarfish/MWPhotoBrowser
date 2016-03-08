@@ -1,9 +1,12 @@
 //
-//  MWPhoto.m
+//  MWRePhoto.m
 //  MWPhotoBrowser
 //
 //  Created by Michael Waterfall on 17/10/2010.
 //  Copyright 2010 d3i. All rights reserved.
+//
+//  Modified by Rasmus Diederichsen
+//  rdiederichse at uos.de
 //
 
 #import "MWRePhoto.h"
@@ -31,17 +34,17 @@
 
 #pragma mark - Class Methods
 
-+ (MWRePhoto *)photoWithImage:(UIImage *)image1 image2:(UIImage*)image2 {
-	return [[MWRePhoto alloc] initWithImage:image1 image2:image2];
++ (MWRePhoto *)photoWithBeforeImage:(UIImage *)image1 afterImage:(UIImage*)image2 {
+    return [[MWRePhoto alloc] initWithBeforeImage:image1 afterImage:image2];
 }
 
-+ (MWRePhoto *)photoWithURL:(NSURL *)url1 url2:(NSURL *)url2 {
-	return [[MWRePhoto alloc] initWithURL:url1 url2:url2];
++ (MWRePhoto *)photoWithBeforeURL:(NSURL *)url1 afterURL:(NSURL *)url2 {
+	return [[MWRePhoto alloc] initWithBeforeURL:url1 afterURL:url2];
 }
 
 #pragma mark - Init
 
-- (id)initWithImage:(UIImage *)image1 image2:(UIImage *)image2 {
+- (id)initWithBeforeImage:(UIImage *)image1 afterImage:(UIImage *)image2 {
 	if ((self = [super init])) {
         _beforeImage = image1;
         _afterImage = image2;
@@ -49,7 +52,7 @@
 	return self;
 }
 
-- (id)initWithURL:(NSURL *)url1 url2:(NSURL *)url2 {
+- (id)initWithBeforeURL:(NSURL *)url1 afterURL:(NSURL *)url2 {
 	if ((self = [super init])) {
 		_beforeURL = [url1 copy];
         _afterURL  = [url2 copy];

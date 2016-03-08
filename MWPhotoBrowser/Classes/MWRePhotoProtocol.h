@@ -1,9 +1,12 @@
 //
-//  MWPhotoProtocol.h
+//  MWRePhotoProtocol.h
 //  MWPhotoBrowser
 //
 //  Created by Michael Waterfall on 02/01/2012.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 d3i. All rights reserved.
+//
+//  Modified by Rasmus Diederichsen
+//  rdiederichse at uos.de
 //
 
 #import <Foundation/Foundation.h>

@@ -1,9 +1,12 @@
 //
-//  MWPhoto.h
+//  MWRePhoto.h
 //  MWPhotoBrowser
 //
 //  Created by Michael Waterfall on 17/10/2010.
 //  Copyright 2010 d3i. All rights reserved.
+//
+//  Modified by Rasmus Diederichsen
+//  rdiederichse at uos.de
 //
 
 #import <Foundation/Foundation.h>
@@ -21,11 +24,11 @@
 @property (nonatomic, readonly) NSURL *beforeURL;
 @property (nonatomic, readonly) NSURL *afterURL;
 
-+ (MWRePhoto *)photoWithImage:(UIImage *)image1 image2:(UIImage*)image2;
-+ (MWRePhoto *)photoWithURL:(NSURL *)url1 url2:(NSURL *)url2;
++ (MWRePhoto *)photoWithBeforeImage:(UIImage *)image1 afterImage:(UIImage*)image2;
++ (MWRePhoto *)photoWithBeforeURL:(NSURL *)url1 afterURL:(NSURL *)url2;
 
-- (id)initWithImage:(UIImage *)image1 image2:(UIImage *)image2;
-- (id)initWithURL:(NSURL *)url1 url2:(NSURL *)url2;
+- (id)initWithBeforeImage:(UIImage *)image1 afterImage:(UIImage *)image2;
+- (id)initWithBeforeURL:(NSURL *)url1 afterURL:(NSURL *)url2;
 
 @end
 

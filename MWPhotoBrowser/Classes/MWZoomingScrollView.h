@@ -1,9 +1,12 @@
 //
-//  ZoomingScrollView.h
+//  MWZoomingScrollView.h
 //  MWPhotoBrowser
 //
 //  Created by Michael Waterfall on 14/10/2010.
 //  Copyright 2010 d3i. All rights reserved.
+//
+//  Modified by Rasmus Diederichsen
+//  rdiederichse at uos.de
 //
 
 #import <Foundation/Foundation.h>
@@ -13,9 +16,7 @@
 
 @class MWPhotoBrowser, MWRePhoto, MWCaptionView;
 
-@interface MWZoomingScrollView : UIScrollView <UIScrollViewDelegate, MWTapDetectingImageViewDelegate, MWTapDetectingViewDelegate> {
-
-}
+@interface MWZoomingScrollView : UIScrollView <UIScrollViewDelegate, MWTapDetectingImageViewDelegate, MWTapDetectingViewDelegate>
 
 @property () NSUInteger index;
 @property (nonatomic) id <MWRePhoto> rePhoto;

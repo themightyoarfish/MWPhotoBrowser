@@ -1,9 +1,12 @@
 //
-//  ZoomingScrollView.m
+//  MWZoomingScrollView.m
 //  MWPhotoBrowser
 //
 //  Created by Michael Waterfall on 14/10/2010.
 //  Copyright 2010 d3i. All rights reserved.
+//
+//  Modified by Rasmus Diederichsen
+//  rdiederichse at uos.de
 //
 
 #import "MWCommon.h"

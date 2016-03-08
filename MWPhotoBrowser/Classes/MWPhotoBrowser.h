@@ -5,6 +5,9 @@
 //  Created by Michael Waterfall on 14/10/2010.
 //  Copyright 2010 d3i. All rights reserved.
 //
+//  Modified by Rasmus Diederichsen
+//  rdiederichse at uos.de
+//
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
@@ -36,6 +39,7 @@
 - (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected;
 - (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser;
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser deleteRePhoto:(id<MWRePhoto>)photo atIndex:(NSUInteger)index;
 
 @end
 

@@ -1,6 +1,5 @@
 //
-//  UIViewTap.m
-//  Momento
+//  MWTapDetectingView.m
 //
 //  Created by Michael Waterfall on 04/11/2009.
 //  Copyright 2009 d3i. All rights reserved.

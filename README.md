@@ -1,5 +1,7 @@
 # MWPhotoBrowser
 
+This is a fork of Micheal Waterfalls MWPhotoBrowser in version 1.4.1, with some bugs fixed by Stanley Jiang. It is modified to be used in my rephotography app and thus not compatible with the original browser.
+
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=mwaterfall&url=https://github.com/mwaterfall/MWPhotoBrowser&title=MWPhotoBrowser&language=&tags=github&category=software)
 
 ## A simple iOS photo browser with optional grid view, captions and selections.

@@ -63,6 +63,8 @@
         [_imageContainer addSubview:_afterPhotoImageView];
         [self addSubview:_imageContainer];
         
+        _beforePhotoImageView.contentMode = UIViewContentModeScaleAspectFit; // we use as frame the after image and fit the before image into it
+        
         CAShapeLayer* maskLayer = [[CAShapeLayer alloc] init];
         _afterPhotoImageView.maskLayer = maskLayer;
 
@@ -158,9 +160,10 @@
 			
 			// Set image
 			UIImage* beforeImg = _beforePhotoImageView.image = imgs[0];
-			_beforePhotoImageView.hidden = NO;
             UIImage* afterImg = _afterPhotoImageView.image = imgs[1];
+            
             _afterPhotoImageView.hidden = NO;
+            _beforePhotoImageView.hidden = NO;
 			
 			// Setup photo frame
 			CGRect photoImageViewFrame;

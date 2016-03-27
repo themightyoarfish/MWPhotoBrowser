@@ -763,7 +763,7 @@
             if (pageIndex > 0) {
                 // Preload index - 1
                 id <MWRePhoto> photo = [self photoAtIndex:pageIndex-1];
-                if (![photo underlyingBeforeImage]) {
+                if (![photo underlyingBeforeImage] || ![photo underlyingAfterImage]) {
                     [photo loadUnderlyingImageAndNotify];
                     MWLog(@"Pre-loading image at index %lu", (unsigned long)pageIndex-1);
                 }
@@ -771,7 +771,7 @@
             if (pageIndex < [self numberOfPhotos] - 1) {
                 // Preload index + 1
                 id <MWRePhoto> photo = [self photoAtIndex:pageIndex+1];
-                if (![photo underlyingBeforeImage]) {
+                if (![photo underlyingBeforeImage]  || ![photo underlyingAfterImage]) {
                     [photo loadUnderlyingImageAndNotify];
                     MWLog(@"Pre-loading image at index %lu", (unsigned long)pageIndex+1);
                 }
